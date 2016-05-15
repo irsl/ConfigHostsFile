@@ -1,7 +1,15 @@
 package Config::HostsFile;
 
+=head1 NAME
+
+Config::HostsFile - Another library to manage the /etc/hosts file on Unix-like platforms
+=cut
+
 use warnings;
 use strict;
+use vars qw($VERSION);
+
+$VERSION     = 1.00;
 
 sub new {
     my $class = shift;
@@ -36,6 +44,7 @@ sub _processor {
      next if(!defined($l));
      next if($l =~ /^[\s#]/);
      next if($l !~ /^([^\s]+)\s+(.+)/);
+
      my %parsed;
      $parsed{"ip"} = $1;
      $parsed{"rest"} = $2;
@@ -116,7 +125,7 @@ sub flush {
   my $obj = shift;
   my $dst_file = shift || $obj->{_hosts_file};
 
-  #print "Flushing to $dst_file\n";
+  #print STDERR "Flushing to $dst_file\n";
   open (my $x, ">$dst_file") or die "Cant open hosts file ($dst_file) for writing: $!";
   for my $l (@{$obj->{_lines}}) {
      next if(!defined($l));
