@@ -121,18 +121,21 @@ sub remove_ip {
 
 }
 
+# this method returns the hosts file lines as string
+sub render {
+  my $obj = shift;
+
+  return join("", grep { $_ }  @{$obj->{_lines}});
+}
+
 sub flush {
   my $obj = shift;
   my $dst_file = shift || $obj->{_hosts_file};
 
   #print STDERR "Flushing to $dst_file\n";
   open (my $x, ">$dst_file") or die "Cant open hosts file ($dst_file) for writing: $!";
-  for my $l (@{$obj->{_lines}}) {
-     next if(!defined($l));
-     print $x $l;
-  }
+  print $x $obj->render();
   close($x);
-
 }
 
 1;
